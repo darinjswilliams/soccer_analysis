@@ -3,6 +3,7 @@ import supervision as sv
 import pickle
 import os
 import cv2
+import numpy as np
 
 import sys
 
@@ -151,6 +152,21 @@ class Tracker:
         
         return frame
 
+    def draw_trangle(self, frame, bbox, color):
+        y = int(bbox[1])
+        # center of circle is bouding box
+        x_center, _ = get_cener_bbox(bbox)
+
+        triangle_points = np.array([ [x_center, y],
+                                     [x_center - 10, y - 20],
+                                     [x_center + 10, y - 20]
+                                  ])
+        cv2.drawContours(frame, [triangle_points], 0, color, cv2.FILLED)
+        cv2.drawContours(frame, [triangle_points], 0, (0,0,0), 2) #black border
+
+        return frame
+
+
     def draw_annotations(self, video_frames, tracks):
 
         output_video_frame= []
@@ -172,6 +188,11 @@ class Tracker:
             # Draw referees
             for _, referee in referee_dict.items():
                 frame = self.draw_ellipse(frame, referee['bbox'], (255, 0, 0))
+
+            
+            # Draw ball
+            for _, ball in ball_dict.items():
+                frame = self.draw_trangle(frame, ball['bbox'], (0, 255, 0))
 
             # append frame to output video
             output_video_frame.append(frame)
