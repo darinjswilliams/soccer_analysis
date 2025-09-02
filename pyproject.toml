@@ -12,6 +12,7 @@ dependencies = [
     "opencv-python>=4.11.0.86",
     "pandas>=2.3.2",
     "roboflow>=1.2.7",
+    "scikit-learn>=1.7.1",
     "supervision>=0.26.1",
     "torch==2.2.0",
     "torchaudio==2.2.0",
