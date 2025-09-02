@@ -2,6 +2,13 @@ from ultralytics import YOLO
 import supervision as sv
 import pickle
 import os
+import cv2
+
+import sys
+
+#we need to get the folder for utils
+sys.path.append('../')
+from utils import get_cener_bbox, get_bbox_width
 
 
 
@@ -15,7 +22,6 @@ class Tracker:
 
         # Batch size to avoid memeory issues
         batch_size=20
-
         detections = []
 
         # Incrementation is done by batch size 20, 40 etc..
@@ -93,7 +99,81 @@ class Tracker:
 
         return tracks
 
+
+    def draw_ellipse(self, frame, bbox, color, track_id=None):
+        y2 = int(bbox[3])
+        # center of circle is bouding box
+
+        x_center, _ = get_cener_bbox(bbox)
+        width = get_bbox_width(bbox)
+
+        cv2.ellipse(frame,
+                    center=(x_center, y2),
+                    axes=(int(width), int(0.35 * width)),
+                    angle=0,
+                    startAngle=-45,
+                    endAngle=235,
+                    color=color,
+                    thickness=2,
+                    lineType=cv2.LINE_4
+                    )
         
+        #draw rectangle for id
+        rectangle_width = 40
+        rectangle_height = 20
+        x1_rect = x_center - rectangle_width // 2
+        x2_rect = x_center + rectangle_width // 2
+        y1_rect = (y2 - rectangle_height//2) + 15  #15 pixels below the ellipse center adding random buffer
+        y2_rect = (y2 + rectangle_height//2) + 15
+
+        if track_id is not None:
+            cv2.rectangle(frame, 
+                          (int(x1_rect), int(y1_rect)),
+                          (int(x2_rect), int(y2_rect)), 
+                          color,
+                          cv2.FILLED)
 
 
- 
+             # Write the track id number
+            x1_text = x1_rect+12
+
+            if track_id > 99:
+                  x1_text -= 10
+
+            cv2.putText(frame,
+                          f'{track_id}',
+                          (int(x1_text), int(y1_rect)+15),
+                          cv2.FONT_HERSHEY_SIMPLEX,
+                          0.5,
+                          (255, 255, 255),
+                          2)             
+
+        
+        return frame
+
+    def draw_annotations(self, video_frames, tracks):
+
+        output_video_frame= []
+
+        for frame_num, frame in enumerate(video_frames):
+            frame = frame.copy()
+
+            # Draw circles using the tracks dictionary
+            player_dict = tracks.get('players', [])[frame_num]
+            ball_dict = tracks.get('ball', [])[frame_num]
+            referee_dict = tracks.get('referees', [])[frame_num]
+
+
+            # Draw players
+            for track_id, player in player_dict.items():
+                frame = self.draw_ellipse(frame, player['bbox'], (0, 0, 255), track_id)
+
+
+            # Draw referees
+            for _, referee in referee_dict.items():
+                frame = self.draw_ellipse(frame, referee['bbox'], (255, 0, 0))
+
+            # append frame to output video
+            output_video_frame.append(frame)
+
+        return output_video_frame
