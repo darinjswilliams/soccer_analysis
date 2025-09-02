@@ -4,6 +4,7 @@ import pickle
 import os
 import cv2
 import numpy as np
+import pandas as pd
 
 import sys
 
@@ -14,11 +15,29 @@ from utils import get_cener_bbox, get_bbox_width
 
 
 class Tracker:
+
     def __init__(self, model_path):
         self.model = YOLO(model_path)  # Load a pretrained model
         self.tracker = sv.ByteTrack()
 
 
+    def interpolate_ball_positions(self, ball_positions):
+        ball_positions = [x.get(1, {}).get('bbox', []) for x in ball_positions]
+        df_ball_positions = pd.DataFrame(ball_positions, columns=['x1', 'y1', 'x2', 'y2'])
+
+        # Interpolate missing values
+        df_ball_positions = df_ball_positions.interpolate()
+
+        #handle edge cases if it is missing in the start or end
+        df_ball_positions = df_ball_positions.bfill()
+
+        # Convert back to list of dictionaries
+        ball_positions = [{1: {'bbox': x}} for x in df_ball_positions.to_numpy().tolist()] 
+
+        return ball_positions  
+
+
+    
     def detect_frames(self, frames):
 
         # Batch size to avoid memeory issues
