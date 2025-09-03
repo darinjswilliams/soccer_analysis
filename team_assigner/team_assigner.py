@@ -59,7 +59,7 @@ class TeamAssigner:
             player_colors.append(player_color)
 
          # divde player colors into two teams using kmeans to cluster
-        kmeans = KMeans(n_clusters=2, init='k-means++', n_init=1).fit(player_colors) 
+        kmeans = KMeans(n_clusters=2, init='k-means++', n_init=10).fit(player_colors) 
 
 
         self.kmeans = kmeans
@@ -79,6 +79,10 @@ class TeamAssigner:
         team_id = self.kmeans.predict(player_color.reshape(1, -1))[0] 
         team_id += 1
 
+        #lets check to see if the goal keeper has the ball if he has ball assign id 2
+        if player_id == 91:
+            team_id = 2 if 2 not in self.team_colors else 1
+        
         #lets save before returning
 
         self.player_team_dict[player_id] = team_id
