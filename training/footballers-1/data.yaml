@@ -1,0 +1,15 @@
+names:
+- ball
+- goalkeeper
+- player
+- referee
+nc: 4
+roboflow:
+  license: CC BY 4.0
+  project: footballers-jclfh
+  url: https://universe.roboflow.com/football-s3oun/footballers-jclfh/dataset/1
+  version: 1
+  workspace: football-s3oun
+test: ../test/images
+train: footballers-1/train/images
+val: footballers-1/valid/images

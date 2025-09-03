@@ -4,6 +4,7 @@ from team_assigner import TeamAssigner
 from player_ball_assigners import PlayerBallAssigner
 from team_ball_control import TeamBallControl
 from camera_movement_esitimator import CameraMovementEstimator
+from view_transformer import ViewTransformer
 
 import numpy as np
 
@@ -32,6 +33,10 @@ def main():
                                                                               stub_path='stubs/camera_movement_stub.pkl')
     # Adjust Positions in Tracks based on Camera Movement
     camera_movement_estimator.add_adjust_position_to_tracks(tracks, camera_movement_per_frame)
+
+    # Transform Positions to Court Coordinates
+    view_transformer = ViewTransformer()
+    view_transformer.add_transform_position_to_tracks(tracks)
 
    # Interpolate Ball Positions
     tracks['ball'] = tracker.interpolate_ball_positions(tracks['ball'])
