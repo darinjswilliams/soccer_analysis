@@ -11,6 +11,7 @@ class CameraMovementEstimator:
 
         self.minimum_distance = 5
 
+
         self.ik_params = dict(
             winSize=(15, 15),
             maxLevel=2,
@@ -21,13 +22,6 @@ class CameraMovementEstimator:
         mask_features = np.zeros_like(first_frame_gracy_scale)
         mask_features[:,0:20] = 1
         mask_features[:, 900:1050] = 1
-
-        # self.features = cv2.goodFeaturesToTrack(first_frame_gracy_scale,
-        #                                         mask = mask_features,
-        #                                         maxCorners=100,
-        #                                         qualityLevel=0.3,
-        #                                         minDistance=3,
-        #                                         blockSize=7)
         
         self.features = dict(
             maxCorners=100,
@@ -36,6 +30,31 @@ class CameraMovementEstimator:
             blockSize=7,
             mask = mask_features
             )
+
+    def add_adjust_position_to_tracks(self, tracks, camera_movement_per_frame):
+        """
+        Adjusts the position of tracks based on camera movement per frame.
+
+        Parameters:
+            tracks (dict): A dictionary where keys are object identifiers and values are lists of tracks.
+                           Each track is a dictionary containing track information including 'position'.
+            camera_movement_per_frame (list): A list of tuples representing the camera movement for each frame.
+                                               Each tuple contains the x and y movement values.
+
+        This method modifies the input `tracks` dictionary by adding an 'position_adjusted' key to each track,
+        which contains the adjusted position calculated by subtracting the camera movement from the original position.
+        """
+        # Loop over objects in tracks
+        for object, object_tracks in tracks.items():
+            for frame_num, track in enumerate(object_tracks):
+                for track_id, track_info in track.items():
+                    position = track_info['position'] 
+                    camaera_movement = camera_movement_per_frame[frame_num]
+                    position_adjusted = (position[0] - camaera_movement[0], position[1] - camaera_movement[1])
+                    tracks[object][frame_num][track_id]['position_adjusted'] = position_adjusted
+                
+               
+
 
     def get_camera_movement(self, frames, read_from_stub=False, stub_path=None):
         # Dummy implementation for camera movement estimation

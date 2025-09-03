@@ -10,7 +10,7 @@ import sys
 
 #we need to get the folder for utils
 sys.path.append('../')
-from utils import get_center_bbox, get_bbox_width
+from utils import get_center_bbox, get_bbox_width, get_foot_position
 
 
 
@@ -36,7 +36,18 @@ class Tracker:
 
         return ball_positions  
 
-
+    def add_positions_to_tracks(self, tracks):
+        for object, object_tracks in tracks.items():
+            for frame_num, track in enumerate(object_tracks):
+                for track_id, track_info in track.items():
+                    bbox = track_info['bbox']
+                    if object == 'ball':
+                        position = get_center_bbox(bbox)
+                    else:
+                        position = get_foot_position(bbox)
+                    tracks[object][frame_num][track_id]['position'] = position
+        return tracks
+                   
     
     def detect_frames(self, frames):
 
