@@ -10,7 +10,7 @@ import sys
 
 #we need to get the folder for utils
 sys.path.append('../')
-from utils import get_cener_bbox, get_bbox_width
+from utils import get_center_bbox, get_bbox_width
 
 
 
@@ -124,7 +124,7 @@ class Tracker:
         y2 = int(bbox[3])
         # center of circle is bouding box
 
-        x_center, _ = get_cener_bbox(bbox)
+        x_center, _ = get_center_bbox(bbox)
         width = get_bbox_width(bbox)
 
         cv2.ellipse(frame,
@@ -174,7 +174,7 @@ class Tracker:
     def draw_trangle(self, frame, bbox, color):
         y = int(bbox[1])
         # center of circle is bouding box
-        x_center, _ = get_cener_bbox(bbox)
+        x_center, _ = get_center_bbox(bbox)
 
         triangle_points = np.array([ [x_center, y],
                                      [x_center - 10, y - 20],
@@ -203,6 +203,12 @@ class Tracker:
             for track_id, player in player_dict.items():
                 color = player.get('team_color', (0, 0, 255))
                 frame = self.draw_ellipse(frame, player['bbox'], color, track_id)
+
+
+                # If player has ball, draw a triangle above the player with
+                if player.get('has_ball', False):
+                    
+                    frame = self.draw_trangle(frame, player['bbox'], (255, 255, 255))
 
 
             # Draw referees
