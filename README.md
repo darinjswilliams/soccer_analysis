@@ -50,7 +50,7 @@ This project focuses on **detecting, tracking, and analyzing** players, referees
 1. You need to create a notebook in colab
 2. Go to Roboflow and create an account.
 3. Search for the dataset your going to train your model, click on it
-4. A modal will appear presenting various export formats comppatible with different computer vision task and tools YOLO, Pascal VOC, COCO
+4. A modal will appear presenting various export formats compatible with different computer vision task and tools YOLO, Pascal VOC, COCO
 5. Select the YOLO5 format
 6. Select **Show download code** This option provides code snippets (e.g., Python, curl) for programmatic download. While useful for integrating with notebooks or scripts, it involves using code
 7. The steps are very similar to this video [Example Video](https://www.youtube.com/watch?v=76E6esnez8E&t=1s)
