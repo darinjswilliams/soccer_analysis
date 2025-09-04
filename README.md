@@ -41,6 +41,7 @@ This project focuses on **detecting, tracking, and analyzing** players, referees
 
 ## Reesources
 - [Video resource](https://drive.google.com/file/d/1httquBFSJ-B58DQG5SZ1kgUQP7XEf1Sr/view?usp=sharing)
+- [Video After Completing Project](https://drive.google.com/file/d/16akHpzVdFvSikzmS7Y3IAb63dJXPYM03/view?usp=sharing)
 - [Kaggle](https://www.kaggle.com)
 - [RoboFlow](https://https://roboflow.com)
 - [Ultralytics](https://docs.ultralytics.com)
