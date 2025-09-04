@@ -62,7 +62,7 @@ This repository is organized to support modular development of a sports analytic
 <img src="assets/project_structure.png" alt="Project Structure" width="600"/>
 
 ---
-## 💡 Architural Diagram - High Level Overview 
-<img src="assets/SoccerArchitureDiagram.png" alt="Architural Diagram - High Level Overview" width="600"/>
+## 💡 Architectural Diagram - High Level Overview 
+<img src="assets/SoccerArchitureDiagram.png" alt="Architectural Diagram - High Level Overview" width="600"/>
 
 
