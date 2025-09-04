@@ -61,6 +61,7 @@ This repository is organized to support modular development of a sports analytic
 
 <img src="assets/project_structure.png" alt="Project Structure" width="600"/>
 
-> 💡 Tip: You can expand each module's description in your README or link to its internal documentation for deeper clarity.
+--- 
+💡 Architectual Diagram - High Level Overview
 
-Would you like help drafting the full README, including setup instructions, usage, and contribution guidelines?
+<img src="assets/SoccerArchitureDiagram.png" alt="Architectual Diagram - High Level Overview" width="600"/>
